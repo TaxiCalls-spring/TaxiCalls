@@ -1,0 +1,101 @@
+version: '2'
+services:
+  discovery:
+    build: discovery
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    links:
+      - configuration
+    ports:
+      - 8761:8761
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  configuration:
+    build: configuration
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  ui:
+    build: ui
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    links:
+      - configuration
+    ports:
+      - 80:8080
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  routes:
+    build: routes
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    links:
+      - configuration
+      - routes-database
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  routes-database:
+    image: mariadb:10
+    expose:
+      - 3306
+    volumes:
+      - routes-data:/var/lib/mysql/data
+    environment:
+      MYSQL_USER: $DATABASE_USER
+      MYSQL_ROOT_PASSWORD: $DATABASE_PASS
+      MYSQL_DATABASE: routes
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  passenger:
+    build: passenger
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    links:
+      - configuration
+      - passenger-database
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  passenger-database:
+    image: mariadb:10
+    expose:
+      - 3306
+    volumes:
+      - passenger-data:/var/lib/mysql/data
+    environment:
+      MYSQL_USER: $DATABASE_USER
+      MYSQL_ROOT_PASSWORD: $DATABASE_PASS
+      MYSQL_DATABASE: passenger
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+volumes:
+  passenger-data:
+  routes-data:
