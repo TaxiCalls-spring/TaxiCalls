@@ -56,7 +56,7 @@ services:
     expose:
       - 3306
     volumes:
-      - routes-data:/var/lib/mysql/data
+      - routes-data:/var/lib/mysql
     environment:
       MYSQL_USER: $DATABASE_USER
       MYSQL_ROOT_PASSWORD: $DATABASE_PASS
@@ -85,7 +85,7 @@ services:
     expose:
       - 3306
     volumes:
-      - passenger-data:/var/lib/mysql/data
+      - passenger-data:/var/lib/mysql
     environment:
       MYSQL_USER: $DATABASE_USER
       MYSQL_ROOT_PASSWORD: $DATABASE_PASS
@@ -96,6 +96,35 @@ services:
         max-size: "10m"
         max-file: "10"
 
+  notifications:
+    build: notifications
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    links:
+      - configuration
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  notifications-database:
+    image: mariadb:10
+    expose:
+      - 3306
+    volumes:
+      - notifications-data:/var/lib/mysql
+    environment:
+      MYSQL_USER: $DATABASE_USER
+      MYSQL_ROOT_PASSWORD: $DATABASE_PASS
+      MYSQL_DATABASE: notifications
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
 volumes:
   passenger-data:
   routes-data:
+  notifications-data:

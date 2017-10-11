@@ -19,3 +19,11 @@ services:
   routes-database:
     ports:
       - 4001:3306
+
+  notifications:
+    ports:
+      - 3002:8080
+
+  notifications-database:
+    ports:
+      - 4002:3306

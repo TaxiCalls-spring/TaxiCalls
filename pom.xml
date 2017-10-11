@@ -14,6 +14,7 @@
         <module>passenger</module>
         <module>routes</module>
         <module>ui</module>
+        <module>notifications</module>
     </modules>
 
 </project>
