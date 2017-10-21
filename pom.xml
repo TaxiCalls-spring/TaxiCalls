@@ -12,9 +12,11 @@
     <modules>
         <module>discovery</module>
         <module>passenger</module>
-        <module>routes</module>
         <module>ui</module>
-        <module>notifications</module>
+        <module>trip</module>
+        <module>notification</module>
+        <module>billing</module>
+        <module>driver</module>
     </modules>
 
 </project>
