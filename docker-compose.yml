@@ -73,8 +73,8 @@ services:
     build: trip
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-        DATABASE_USER: $DATABASE_USER
-        DATABASE_PASS: $DATABASE_PASS
+      DATABASE_USER: $DATABASE_USER
+      DATABASE_PASS: $DATABASE_PASS
     restart: unless-stopped
     links:
       - configuration
@@ -185,6 +185,20 @@ services:
       MYSQL_ROOT_PASSWORD: $DATABASE_PASS
       MYSQL_DATABASE: billing
     restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  gateway:
+    build: gateway
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    restart: unless-stopped
+    links:
+      - configuration
+    ports:
+      - 8080:8080
     logging:
       options:
         max-size: "10m"

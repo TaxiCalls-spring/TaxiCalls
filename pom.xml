@@ -17,6 +17,7 @@
         <module>notification</module>
         <module>billing</module>
         <module>driver</module>
+        <module>gateway</module>
     </modules>
 
 </project>
